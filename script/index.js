@@ -3,25 +3,30 @@ let InputTitle = document.getElementById("title");
 let InputDesc = document.getElementById("desc");
 let myUL = document.getElementById("myUL");
 let deleteLets = document.getElementById("delete");
+
 let objectId = 0;
+
+function TodoObject(id, title, desc) {
+  this.id = id;
+  this.title = title;
+  this.desc = desc;
+}
+
 obj = JSON.parse(localStorage.getItem("id"));
+
 if (obj) {
-  for (let index = 0; index < obj.length; index++) {
-    enterProduct(obj[index].id, obj[index].title, obj[index].desc);
-    console.log(obj[index]);
-  }
+  obj.forEach(element => {
+    enterProduct(element.id, element.title, element.desc);
+  });
 } else {
   localStorage.setItem("id", JSON.stringify([]));
 }
+
+
 btn.addEventListener("click", enterProduct);
 
 function enterProduct(id, title, desc) {
   if (InputDesc.value && InputTitle.value) {
-    let todo = {
-      id: 0,
-      title: title,
-      desc: desc,
-    };
     if (
       InputTitle.value &&
       InputTitle.value.trim() &&
@@ -29,27 +34,18 @@ function enterProduct(id, title, desc) {
       InputDesc.value.trim()
     ) {
       objectId++;
-      todo.id = objectId;
-      todo.title = InputTitle.value;
-      todo.desc = InputDesc.value;
+      let todoObj = new TodoObject(objectId, InputTitle.value, InputDesc.value);
       InputTitle.value = "";
       InputDesc.value = "";
-      saveToArr(todo);
-      myUL.innerHTML += saveDatatoTemplate(todo);
+      saveToLocalStorage(todoObj);
+      myUL.innerHTML += saveDatatoTemplate(todoObj);
     }
-  } else {
+  } else if ((id, title, desc)) {
     objectId = id;
-    myUL.innerHTML += `<div id="template-${id}" class="template-app">
-        <div class="title-${id} template-header">
-                <h2 id="title-${id}">${title}</h2>
-                <button onclick="deleteList(${id})">x</button>
-        </div>
-        <div class="desc-${id}>
-            <h2 id="desc-${id}">${desc}</h2>
-        </div>
-        </div>`;
+    myUL.innerHTML += saveDatatoTemplate("", id, title, desc);
   }
 }
+
 
 function deleteList(id) {
   obj = JSON.parse(localStorage.getItem("id"));
@@ -63,19 +59,22 @@ function deleteList(id) {
   myUL.removeChild(child);
 }
 
-function saveToArr(object) {
+
+function saveToLocalStorage(object) {
   obj = obj || [];
   obj.push(object);
   localStorage.setItem("id", JSON.stringify(obj));
 }
-function saveDatatoTemplate(obj) {
-  return `<div id="template-${obj.id}" class="template-app">
-    <div class="title-${obj.id} template-header">
-            <h2 id="title-${obj.id}">${obj.title}</h2>
-            <button onclick="deleteList(${obj.id})">x</button>
+
+
+function saveDatatoTemplate(obj, id, title, desc) {
+  return `<div id="template-${obj.id || id}" class="template-app">
+    <div class="title-${obj.id || id} template-header">
+            <h2 id="title-${obj.id || id}">${obj.title || title}</h2>
+            <button onclick="deleteList(${obj.id || id})">x</button>
     </div>
-    <div class="desc-${obj.id}>
-        <h2 id="desc-${obj.id}">${obj.desc}</h2>
+    <div class="desc-${obj.id || id}>
+        <h2 id="desc-${obj.id || id}">${obj.desc || desc}</h2>
     </div>
     </div>`;
 }
