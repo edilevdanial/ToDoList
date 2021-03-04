@@ -22,6 +22,7 @@ const saveDataToTemplate = (obj, id, title, desc) => {
     </div>`;
 }
 
+
 const saveToLocalStorage = (object = []) => {
   obj.push(object);
   localStorage.setItem("id", JSON.stringify(obj));
@@ -34,6 +35,7 @@ const enterProduct = (id, title, desc) => {
       let todoObj = new TodoObject(objectId, InputTitle.value, InputDesc.value);
       InputTitle.value = InputDesc.value = "";
       saveToLocalStorage(todoObj);
+
       myUL.innerHTML += saveDataToTemplate(todoObj);
   } else if (id, title, desc) {
     objectId = id;
