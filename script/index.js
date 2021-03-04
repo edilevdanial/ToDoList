@@ -2,12 +2,15 @@ let btn = document.getElementById("btn");
 let InputTitle = document.getElementById("title");
 let InputDesc = document.getElementById("desc");
 let myUL = document.getElementById("myUL");
-let deleteLets = document.getElementById("delete");
 
 let objectId = 0;
 
+window.onkeyup = e => {
+	if(e.keyCode === 13)
+  enterProduct()
+}
 
-const saveDatatoTemplate = (obj, id, title, desc) => {
+const saveDataToTemplate = (obj, id, title, desc) => {
   return `<div id="template-${obj.id || id}" class="template-app">
     <div class="title-${obj.id || id} template-header">
             <h2 id="title-${obj.id || id}">${obj.title || title}</h2>
@@ -19,8 +22,8 @@ const saveDatatoTemplate = (obj, id, title, desc) => {
     </div>`;
 }
 
-const saveToLocalStorage = object => {
-  obj = obj || [];
+
+const saveToLocalStorage = (object = []) => {
   obj.push(object);
   localStorage.setItem("id", JSON.stringify(obj));
 }
@@ -32,12 +35,16 @@ const enterProduct = (id, title, desc) => {
       let todoObj = new TodoObject(objectId, InputTitle.value, InputDesc.value);
       InputTitle.value = InputDesc.value = "";
       saveToLocalStorage(todoObj);
-      myUL.innerHTML += saveDatatoTemplate(todoObj);
-  } else if ((id, title, desc)) {
+
+      myUL.innerHTML += saveDataToTemplate(todoObj);
+  } else if (id, title, desc) {
     objectId = id;
-    myUL.innerHTML += saveDatatoTemplate("", id, title, desc);
+    myUL.innerHTML += saveDataToTemplate("", id, title, desc);
   }
 }
+
+btn.addEventListener("click", enterProduct);
+
 class TodoObject {
   constructor(id, title, desc){
   this.id = id;
@@ -55,13 +62,10 @@ if (obj) {
   localStorage.setItem("id", JSON.stringify([]));
 }
 
-
-btn.addEventListener("click", enterProduct);
-
 const deleteList = id => {
   obj = JSON.parse(localStorage.getItem("id"));
   for (let index = 0; index < obj.length; index++) {
-    if (obj[index].id == id) {
+    if (obj[index].id === id) {
       obj.splice(index, 1);
     }
   }
