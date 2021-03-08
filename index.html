@@ -8,14 +8,16 @@
     <script async src="script/index.js"></script>
 </head>
     <body>
-    
     <div id="myDIV" class="header">
       <h2 style="margin:5px">My To Do List</h2>
       <input type="text" id="title" placeholder="Title...">
       <input type="text" id="desc" placeholder="Description...">
-      <button id="btn">Add</button>
+      <button class="addBtn" id="btn">Add</button>
     </div>
-    
+    <div class="header header__custom">
+      <input id="search" type="text" placeholder="Search...">
+      <button class="addBtn btn__custom" id="search-btn">Search</button>
+    </div>
     <div id="myUL"></div>
 </body>
 </html>

@@ -2,67 +2,124 @@ let btn = document.getElementById("btn");
 let InputTitle = document.getElementById("title");
 let InputDesc = document.getElementById("desc");
 let myUL = document.getElementById("myUL");
+let search = document.getElementById("search");
+let searchBtn = document.getElementById("search-btn");
 
 let objectId = 0;
+let date = new Date();
 
-window.onkeyup = e => {
-	if(e.keyCode === 13)
-  enterProduct()
-}
+window.onkeyup = (e) => {
+  if (e.keyCode === 13) enterProduct();
+};
+
+const searchEl = () => {
+  console.log(search.value)
+  let data = JSON.parse(localStorage.getItem("id"));
+  let check = false;
+  if (search.value && search.value.trim()) {
+    data.forEach( element => {
+      let date = [...element.date]
+      console.log(data);
+      // не добавил правильного поиска с датой и надо сделать без кнопки
+      if (
+        search.value === element.title ||
+        search.value === element.desc ||
+        search.value === element.date
+      ) {
+        debugger
+        check = true;
+        myUL.innerHTML = "";
+        myUL.innerHTML += saveDataToTemplate(element);
+      }else if(!check){
+        myUL.innerHTML = "";
+      }
+    });
+  }else if(myUL.innerHTML === "") {
+
+    debugger
+    data.forEach((element) => {
+      enterProduct(element.id, element.title, element.desc);
+    });
+  }
+  
+  search.value = "";
+};
+
+searchBtn.addEventListener("click", searchEl);
 
 const saveDataToTemplate = (obj, id, title, desc) => {
   return `<div id="template-${obj.id || id}" class="template-app">
     <div class="title-${obj.id || id} template-header">
-            <h2 id="title-${obj.id || id}">${obj.title || title}</h2>
-            <button onclick="deleteList(${obj.id || id})">x</button>
+            <div style="display:flex;">
+            <p>Title:</p>
+            <h4 id="title-${obj.id || id}">${obj.title || title}</h4>
+            </div>
+            <div>
+            <button class="template__btn" onclick="deleteList(${
+              obj.id || id
+            })">x</button>
+              </div>
+            </div>
+    <div class="desc-${obj.id || id}" style="display:flex;">
+        <p>Description:</p>
+        <h4 id="desc-${obj.id || id}">${obj.desc || desc}</h4>
     </div>
-    <div class="desc-${obj.id || id}>
-        <h2 id="desc-${obj.id || id}">${obj.desc || desc}</h2>
+    <div class="template__date">
+    <h4>Дата Добавления:${date.toDateString()}</h4> 
     </div>
     </div>`;
-}
-
+};
 
 const saveToLocalStorage = (object = []) => {
   obj.push(object);
   localStorage.setItem("id", JSON.stringify(obj));
-}
+};
 
 const enterProduct = (id, title, desc) => {
-  if (InputDesc.value && InputTitle.value && InputDesc.value.trim() &&
-  InputTitle.value.trim()) {
-      objectId++;
-      let todoObj = new TodoObject(objectId, InputTitle.value, InputDesc.value);
-      InputTitle.value = InputDesc.value = "";
-      saveToLocalStorage(todoObj);
+  if (
+    InputDesc.value &&
+    InputTitle.value &&
+    InputDesc.value.trim() &&
+    InputTitle.value.trim()
+  ) {
+    objectId++;
+    let todoObj = new TodoObject(
+      objectId,
+      InputTitle.value,
+      InputDesc.value,
+      date.toDateString()
+    );
+    InputTitle.value = InputDesc.value = "";
+    saveToLocalStorage(todoObj);
 
-      myUL.innerHTML += saveDataToTemplate(todoObj);
-  } else if (id, title, desc) {
+    myUL.innerHTML += saveDataToTemplate(todoObj);
+  } else if ((id, title, desc)) {
     objectId = id;
     myUL.innerHTML += saveDataToTemplate("", id, title, desc);
   }
-}
+};
 
 btn.addEventListener("click", enterProduct);
 
 class TodoObject {
-  constructor(id, title, desc){
-  this.id = id;
-  this.title = title;
-  this.desc = desc;
+  constructor(id, title, desc, date) {
+    this.id = id;
+    this.title = title;
+    this.desc = desc;
+    this.date = date;
   }
 }
 
 obj = JSON.parse(localStorage.getItem("id"));
 if (obj) {
-  obj.forEach(element => {
+  obj.forEach((element) => {
     enterProduct(element.id, element.title, element.desc);
   });
 } else {
   localStorage.setItem("id", JSON.stringify([]));
 }
 
-const deleteList = id => {
+const deleteList = (id) => {
   obj = JSON.parse(localStorage.getItem("id"));
   for (let index = 0; index < obj.length; index++) {
     if (obj[index].id === id) {
@@ -72,4 +129,17 @@ const deleteList = id => {
   localStorage.setItem("id", JSON.stringify(obj));
   let child = document.getElementById(`template-${id}`);
   myUL.removeChild(child);
-}
+};
+
+let ford = {
+  model: "Ford X244",
+  year: 2018,
+};
+console.log(ford);
+
+let arr = [12, 24, 24].map((elemetn) => {
+  if (elemetn % 2 === 0) {
+    return Math.sqrt(elemetn).toFixed(0);
+  }
+});
+console.log(arr);
