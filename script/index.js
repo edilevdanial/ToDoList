@@ -97,6 +97,7 @@ const enterProduct = (id, title, desc) => {
     myUL.insertAdjacentHTML("afterbegin",htmlTemplate)
   } else if ((id, title, desc)) {
     objectId = id;
+    
     let htmlTemplate = saveDataToTemplate("", id, title, desc); 
     myUL.insertAdjacentHTML("afterbegin",htmlTemplate)
   }
