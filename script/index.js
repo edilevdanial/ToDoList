@@ -90,12 +90,15 @@ const enterProduct = (id, title, desc) => {
       date.toDateString()
     );
     InputTitle.value = InputDesc.value = "";
-    saveToLocalStorage(todoObj);
 
-    myUL.innerHTML += saveDataToTemplate(todoObj);
+    saveToLocalStorage(todoObj);
+    
+    let htmlTemplate = saveDataToTemplate(todoObj); 
+    myUL.insertAdjacentHTML("afterbegin",htmlTemplate)
   } else if ((id, title, desc)) {
     objectId = id;
-    myUL.innerHTML += saveDataToTemplate("", id, title, desc);
+    let htmlTemplate = saveDataToTemplate("", id, title, desc); 
+    myUL.insertAdjacentHTML("afterbegin",htmlTemplate)
   }
 };
 
